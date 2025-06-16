@@ -151,16 +151,6 @@ Macros are saved in JSON format with this structure:
 - Always test your macros before production use
 - Regularly backup important macros
 
-## Contributing
-
-Contributions are welcome! To contribute:
-
-1. Fork the project
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
 ## License
 
 This project is under MIT license. See the `LICENSE` file for more details.
@@ -174,4 +164,4 @@ For any questions or issues:
 
 ---
 
-**Developed with Python** 
+**Developed by akrm00** 
