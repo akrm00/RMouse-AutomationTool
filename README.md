@@ -153,7 +153,7 @@ Macros are saved in JSON format with this structure:
 
 ## License
 
-This project is under MIT license. See the `LICENSE` file for more details.
+- This project is under MIT license. See the `LICENSE` file for more details.
 ---
 
 **Developed by akrm00** 
