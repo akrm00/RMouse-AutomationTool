@@ -1,6 +1,6 @@
-# Macro Automation Tool
+# RMouse Automation Tool
 
-A modern macro automation tool with graphical interface, similar to TinyTask or ReMouse.
+A modern mouse automation tool with graphical interface.
 
 ## Features
 
