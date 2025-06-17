@@ -16,14 +16,19 @@ from storage import MacroStorage
 
 class ModernButton(ctk.CTkButton):
     def __init__(self, *args, **kwargs):
+        self._custom_hover_color = kwargs.pop('hover_color', ("#c4b5fd", "#8b5cf6"))
+        self._original_fg_color = kwargs.get('fg_color', ("#a78bfa", "#7c3aed"))
+        
+        kwargs['hover_color'] = self._original_fg_color
+        
         super().__init__(*args, **kwargs)
-        self._original_fg_color = kwargs.get('fg_color', ("#1f538d", "#1f538d"))
         
         self.bind("<Enter>", self._on_enter)
         self.bind("<Leave>", self._on_leave)
     
     def _on_enter(self, event=None):
-        self.configure(fg_color=("#2d6bb4", "#2d6bb4"))
+        self.configure(fg_color=self._custom_hover_color)
+        self.after(1, lambda: self.configure(fg_color=self._custom_hover_color))
     
     def _on_leave(self, event=None):
         self.configure(fg_color=self._original_fg_color)
@@ -182,11 +187,10 @@ class MacroAutomationApp:
             height=50,
             font=ctk.CTkFont(family="Segoe UI", size=14, weight="bold"),
             fg_color=("#a78bfa", "#7c3aed"),
-            hover_color=("#c4b5fd", "#9333ea"),
+            hover_color=("#8b5cf6", "#8b5cf6"),
             text_color="#ffffff",
             corner_radius=25
         )
-        self.play_button._hover_color = ("#c4b5fd", "#9333ea")
         self.play_button.pack(side="left", expand=True, fill="x", padx=(0, 10))
         
         # Record button with orange color
@@ -197,11 +201,10 @@ class MacroAutomationApp:
             height=50,
             font=ctk.CTkFont(family="Segoe UI", size=14, weight="bold"),
             fg_color=("#3e1d77", "#3e1d77"),
-            hover_color=("#fb923c", "#32175f"),
+            hover_color=("#5b21b6", "#4c1d95"),
             text_color="#ffffff",
             corner_radius=25
         )
-        self.record_button._hover_color = ("#fb923c", "#32175f")
         self.record_button.pack(side="left", expand=True, fill="x", padx=(0, 10))
         
         # Save/Load button
@@ -212,11 +215,10 @@ class MacroAutomationApp:
             height=50,
             font=ctk.CTkFont(family="Segoe UI", size=14, weight="bold"),
             fg_color=(self.colors['bg_tertiary'], self.colors['bg_tertiary']),
-            hover_color=("#404040", "#404040"),
+            hover_color=("#7f7f82", "#7f7f82"),
             text_color="#ffffff",
             corner_radius=25
         )
-        self.saveload_button._hover_color = ("#404040", "#404040")
         self.saveload_button.pack(side="left", expand=True, fill="x")
     
     def setup_settings_section(self, parent):
@@ -384,12 +386,11 @@ class MacroAutomationApp:
             width=100,
             height=35,
             fg_color=(self.colors['accent_gradient_start'], self.colors['accent_gradient_end']),
-            hover_color=("#a855f7", "#818cf8"),
+            hover_color=("#c4b5fd", "#8b5cf6"),
             text_color=self.colors['text_primary'],
             corner_radius=18,
             font=ctk.CTkFont(family="Segoe UI", size=12)
         )
-        close_button._hover_color = ("#a855f7", "#818cf8")
         close_button.pack(pady=(20, 0))
     
     def setup_status_section(self, parent):
@@ -495,12 +496,11 @@ class MacroAutomationApp:
             command=self.save_sequence_as,
             height=40,
             fg_color=(self.colors['accent_gradient_start'], self.colors['accent_gradient_end']),
-            hover_color=("#a855f7", "#818cf8"),
+            hover_color=("#c4b5fd", "#8b5cf6"),
             text_color=self.colors['text_primary'],
             corner_radius=20,
             font=ctk.CTkFont(family="Segoe UI", size=14)
         )
-        save_button._hover_color = ("#a855f7", "#818cf8")
         save_button.pack(pady=(0, 10), padx=20, fill="x")
         
         # Load button
@@ -510,12 +510,11 @@ class MacroAutomationApp:
             command=self.load_sequence_from_file,
             height=40,
             fg_color=(self.colors['bg_tertiary'], self.colors['bg_tertiary']),
-            hover_color=("#374151", "#374151"),
+            hover_color=("#6d28d9", "#5b21b6"),
             text_color=self.colors['text_primary'],
             corner_radius=20,
             font=ctk.CTkFont(family="Segoe UI", size=14)
         )
-        load_button._hover_color = ("#374151", "#374151")
         load_button.pack(pady=(0, 20), padx=20, fill="x")
         
         # Recent macros
@@ -579,12 +578,11 @@ class MacroAutomationApp:
                     width=60,
                     height=30,
                     fg_color=(self.colors['accent_gradient_start'], self.colors['accent_gradient_end']),
-                    hover_color=("#a855f7", "#818cf8"),
+                    hover_color=("#c4b5fd", "#8b5cf6"),
                     text_color=self.colors['text_primary'],
                     corner_radius=15,
                     font=ctk.CTkFont(family="Segoe UI", size=12)
                 )
-                load_macro_btn._hover_color = ("#a855f7", "#818cf8")
                 load_macro_btn.pack(side="right", padx=10)
     
     def setup_callbacks(self):
@@ -666,6 +664,7 @@ class MacroAutomationApp:
         else:
             if self.current_sequence:
                 self.save_settings()
+                self.player.load_sequence(self.current_sequence)
                 if self.player.play():
                     pass
             else:
@@ -676,6 +675,7 @@ class MacroAutomationApp:
             self.current_sequence = self.recorder.stop_recording()
             if self.current_sequence:
                 self.storage.save_last_sequence(self.current_sequence)
+                self.player.load_sequence(self.current_sequence)
         else:
             self.recorder.start_recording()
     
@@ -800,4 +800,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main() 
